@@ -7,49 +7,75 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--tg-theme-bg-color, #f4f6f9);
             color: var(--tg-theme-text-color, #222);
             margin: 0;
-            padding: 15px;
+            padding: 20px;
         }
         .container {
-            max-width: 400px;
+            max-width: 420px;
             margin: auto;
             background: var(--tg-theme-secondary-bg-color, #ffffff);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
         }
-        h2 { color: #00853f; text-align: center; margin-top: 0; }
+        h2 { 
+            color: #00853f; 
+            text-align: center; 
+            margin-top: 0;
+            font-size: 22px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+        }
         .timer-box {
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 10px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: #1b5e20;
+            padding: 12px;
+            border-radius: 10px;
             text-align: center;
             font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 14px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
-        label { font-weight: bold; display: block; margin-top: 12px; font-size: 14px; }
+        label { 
+            font-weight: 600; 
+            display: block; 
+            margin-top: 14px; 
+            font-size: 14px;
+            color: #444;
+        }
         select, input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 14px;
             margin-top: 6px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
             box-sizing: border-box;
             font-size: 14px;
+            background-color: #fff;
+            color: #111;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        select:focus, input:focus {
+            border-color: #00853f;
         }
         .rules {
             font-size: 12px;
-            color: #666;
-            margin-top: 12px;
-            line-height: 1.4;
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 6px;
+            color: #555;
+            margin-top: 16px;
+            line-height: 1.5;
+            background: #f8fafc;
+            border-left: 4px solid #00853f;
+            padding: 10px 12px;
+            border-radius: 4px;
         }
         button {
             width: 100%;
@@ -57,37 +83,51 @@
             color: white;
             border: none;
             padding: 14px;
-            margin-top: 20px;
+            margin-top: 24px;
             font-size: 16px;
-            font-weight: bold;
-            border-radius: 6px;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,133,63,0.2);
+            transition: background-color 0.2s, transform 0.1s;
         }
+        button:active { transform: scale(0.98); }
         button:hover { background-color: #006c32; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Easy Travel Auction</h2>
+        <h2>🌍 Easy Travel</h2>
+        <div class="subtitle">Lowest Unique Bid Flight Auction</div>
         
         <div class="timer-box">
             ⏳ Auction Closes In: <span id="countdown">12:45:30</span>
         </div>
         
-        <label for="route">Select Travel / Flight Route:</label>
+        <label for="route">Select Flight Route:</label>
         <select id="route">
-            <option value="Addis Ababa to Lalibela">Addis Ababa ➔ Lalibela</option>
-            <option value="Addis Ababa to Gondar">Addis Ababa ➔ Gondar</option>
-            <option value="Addis Ababa to Bahir Dar">Addis Ababa ➔ Bahir Dar</option>
-            <option value="Addis Ababa to Dubai">Addis Ababa ➔ Dubai</option>
+            <optgroup label="Domestic Destinations">
+                <option value="Addis Ababa ➔ Lalibela">Addis Ababa ➔ Lalibela</option>
+                <option value="Addis Ababa ➔ Gondar">Addis Ababa ➔ Gondar</option>
+                <option value="Addis Ababa ➔ Bahir Dar">Addis Ababa ➔ Bahir Dar</option>
+                <option value="Addis Ababa ➔ Axum">Addis Ababa ➔ Axum</option>
+                <option value="Addis Ababa ➔ Dire Dawa">Addis Ababa ➔ Dire Dawa</option>
+            </optgroup>
+            <optgroup label="International Destinations">
+                <option value="Addis Ababa ➔ Dubai">Addis Ababa ➔ Dubai</option>
+                <option value="Addis Ababa ➔ Nairobi">Addis Ababa ➔ Nairobi</option>
+                <option value="Addis Ababa ➔ Cairo">Addis Ababa ➔ Cairo</option>
+                <option value="Addis Ababa ➔ Bangkok">Addis Ababa ➔ Bangkok</option>
+                <option value="Addis Ababa ➔ Washington DC">Addis Ababa ➔ Washington DC</option>
+            </optgroup>
         </select>
 
-        <label for="bidAmount">Your Lowest Unique Bid (ETB):</label>
-        <input type="number" id="bidAmount" placeholder="e.g., 1250 ETB" min="1">
+        <label for="bidAmount">Your Unique Bid Amount (ETB):</label>
+        <input type="number" id="bidAmount" placeholder="e.g., 2450" min="1">
 
         <div class="rules">
-            📌 <b>Rule:</b> The winner is the person who submits the lowest bid amount that <b>no one else</b> has chosen!
+            📌 <b>How to Win:</b> The winner is the participant who submits the lowest unique bid amount that <b>no one else</b> has chosen for that route!
         </div>
 
         <button onclick="submitBid()">Place Unique Bid</button>
@@ -97,6 +137,7 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
+        // Beautiful live countdown simulation
         let timeRemaining = 12 * 3600 + 45 * 60 + 30;
         setInterval(() => {
             if (timeRemaining > 0) timeRemaining--;
