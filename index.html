@@ -36,7 +36,7 @@
         }
 
         .hero-banner {
-            height: 130px;
+            height: 120px;
             background: linear-gradient(rgba(0,0,0,0.2), rgba(15,23,42,0.85)), 
                         url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80') center/cover;
             display: flex;
@@ -57,6 +57,20 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Top Selected Bid Badge */
+        .selected-bid-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+            display: none;
         }
 
         .category-card {
@@ -85,14 +99,14 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             margin-bottom: 16px;
-            max-height: 230px;
+            max-height: 220px;
             overflow-y: auto;
             padding-right: 2px;
         }
 
         .dest-card {
             position: relative;
-            height: 95px;
+            height: 90px;
             border-radius: 12px;
             overflow: hidden;
             cursor: pointer;
@@ -200,9 +214,9 @@
         .telebirr-box {
             background: #eff6ff;
             border: 1.5px solid #60a5fa;
-            border-radius: 10px;
-            padding: 10px;
-            margin-top: 10px;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 12px;
             text-align: center;
             font-weight: 700;
             color: #1e40af;
@@ -211,13 +225,18 @@
 
         .telebirr-box code {
             background: #ffffff;
-            padding: 2px 8px;
-            border-radius: 6px;
+            padding: 4px 10px;
+            border-radius: 8px;
             color: #0d9488;
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+            margin-top: 4px;
         }
 
-        .primary-btn {
+        .submit-btn {
             width: 100%;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
@@ -229,7 +248,10 @@
             border-radius: 12px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,133,63,0.3);
+            transition: all 0.2s;
         }
+
+        .submit-btn:active { transform: scale(0.98); }
 
         .back-link {
             background: none;
@@ -253,7 +275,7 @@
 
         <div class="content">
 
-            <!-- SCREEN 1: CATEGORY -->
+            <!-- SCREEN 1: CATEGORY SELECTION -->
             <div id="screenHome" class="screen active">
                 <p style="font-weight:700; font-size:13px; color:var(--text-sub); margin-bottom:12px;">SELECT CATEGORY</p>
                 
@@ -274,31 +296,37 @@
                 </div>
             </div>
 
-            <!-- SCREEN 2: OPTIONS -->
+            <!-- SCREEN 2: OPTIONS & BID INPUT -->
             <div id="screenOptions" class="screen">
                 <button class="back-link" onclick="goHome()">❮ Back to Categories</button>
+                
+                <!-- TOP SELECTED BID BADGE -->
+                <div id="topBidBadge" class="selected-bid-badge">
+                    🎯 Selected Bid: <span id="topBidVal">0</span> ETB
+                </div>
+
                 <h3 id="catTitle" style="margin: 0 0 10px 0; color:var(--primary-dark); font-size:16px;"></h3>
 
                 <label>1. Select Destination (Tap Picture):</label>
                 <div id="localGrid" class="dest-grid" style="display:none;">
                     <div class="dest-card" onclick="selectDestination('Hawassa', this)">
-                        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80" alt="Hawassa Cultural Fish Market & Lake">
+                        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80" alt="Hawassa">
                         <div class="dest-label">🌊 Hawassa Cultural</div>
                     </div>
                     <div class="dest-card" onclick="selectDestination('Adama', this)">
-                        <img src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=400&q=80" alt="Adama Rift Heritage">
+                        <img src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=400&q=80" alt="Adama">
                         <div class="dest-label">🏙️ Adama Heritage</div>
                     </div>
                     <div class="dest-card" onclick="selectDestination('Djibouti', this)">
-                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80" alt="Djibouti Coast">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80" alt="Djibouti">
                         <div class="dest-label">🏖️ Djibouti Sea</div>
                     </div>
                     <div class="dest-card" onclick="selectDestination('Harar', this)">
-                        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=400&q=80" alt="Harar Jugol UNESCO">
+                        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=400&q=80" alt="Harar">
                         <div class="dest-label">🕌 Harar Jugol</div>
                     </div>
                     <div class="dest-card" onclick="selectDestination('Wenchi', this)">
-                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400&q=80" alt="Wenchi Crater Lake">
+                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400&q=80" alt="Wenchi">
                         <div class="dest-label">🌋 Wenchi Crater</div>
                     </div>
                 </div>
@@ -351,8 +379,8 @@
                     </button>
                 </div>
 
-                <label for="bidVal">3-Digit Max Unique Bid (ETB):</label>
-                <input type="text" id="bidVal" placeholder="e.g. 111 or 999" maxlength="3" oninput="calculateTotals()">
+                <label for="bidVal">3. Enter Your 3-Digit Unique Bid (ETB):</label>
+                <input type="text" id="bidVal" placeholder="e.g. 111 or 999" maxlength="3" oninput="updateBidDisplay()">
 
                 <div class="fee-card">
                     <div class="fee-row">
@@ -370,10 +398,12 @@
                 </div>
 
                 <div class="telebirr-box">
-                    📲 Pay via Telebirr: <code>+251922821774</code>
+                    📲 Telebirr Merchant Number:<br>
+                    <code>+251922821774</code>
                 </div>
 
-                <button class="primary-btn" onclick="submitBid()">📲 Proceed to Telebirr Payment</button>
+                <!-- SUBMIT BUTTON -->
+                <button class="submit-btn" onclick="submitBid()">🚀 Submit Bid & Get Payment Details</button>
             </div>
 
         </div>
@@ -418,16 +448,25 @@
             state.serviceFee = fee;
             document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('selected'));
             el.classList.add('selected');
-            calculateTotals();
+            updateBidDisplay();
         }
 
-        function calculateTotals() {
+        function updateBidDisplay() {
             let input = document.getElementById('bidVal').value.replace(/[^0-9]/g, '').slice(0, 3);
             document.getElementById('bidVal').value = input;
 
             const bidNum = parseInt(input) || 0;
-            const total = bidNum + state.serviceFee;
 
+            // Update top badge
+            const topBadge = document.getElementById('topBidBadge');
+            if (bidNum > 0) {
+                topBadge.style.display = 'block';
+                document.getElementById('topBidVal').innerText = bidNum;
+            } else {
+                topBadge.style.display = 'none';
+            }
+
+            const total = bidNum + state.serviceFee;
             document.getElementById('dispBid').innerText = bidNum + " ETB";
             document.getElementById('dispFee').innerText = state.serviceFee + " ETB";
             document.getElementById('dispTotal').innerText = total + " ETB";
@@ -435,11 +474,11 @@
 
         function submitBid() {
             if (!state.destination) {
-                alert("Please tap to choose a destination!");
+                alert("Please select a destination!");
                 return;
             }
             if (!state.tierName) {
-                alert("Please choose a travel group tier!");
+                alert("Please select a travel group tier!");
                 return;
             }
 
