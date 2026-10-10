@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Travel - Lowest Unique Bid Auction</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color, #f4f6f9);
+            color: var(--tg-theme-text-color, #222);
+            margin: 0;
+            padding: 15px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: var(--tg-theme-secondary-bg-color, #ffffff);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 { color: #00853f; text-align: center; margin-top: 0; }
+        .timer-box {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        label { font-weight: bold; display: block; margin-top: 12px; font-size: 14px; }
+        select, input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .rules {
+            font-size: 12px;
+            color: #666;
+            margin-top: 12px;
+            line-height: 1.4;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        button {
+            width: 100%;
+            background-color: #00853f;
+            color: white;
+            border: none;
+            padding: 14px;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover { background-color: #006c32; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Easy Travel Auction</h2>
+        
+        <div class="timer-box">
+            ⏳ Auction Closes In: <span id="countdown">12:45:30</span>
+        </div>
+        
+        <label for="route">Select Travel / Flight Route:</label>
+        <select id="route">
+            <option value="Addis Ababa to Lalibela">Addis Ababa ➔ Lalibela</option>
+            <option value="Addis Ababa to Gondar">Addis Ababa ➔ Gondar</option>
+            <option value="Addis Ababa to Bahir Dar">Addis Ababa ➔ Bahir Dar</option>
+            <option value="Addis Ababa to Dubai">Addis Ababa ➔ Dubai</option>
+        </select>
+
+        <label for="bidAmount">Your Lowest Unique Bid (ETB):</label>
+        <input type="number" id="bidAmount" placeholder="e.g., 1250 ETB" min="1">
+
+        <div class="rules">
+            📌 <b>Rule:</b> The winner is the person who submits the lowest bid amount that <b>no one else</b> has chosen!
+        </div>
+
+        <button onclick="submitBid()">Place Unique Bid</button>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let timeRemaining = 12 * 3600 + 45 * 60 + 30;
+        setInterval(() => {
+            if (timeRemaining > 0) timeRemaining--;
+            let hours = Math.floor(timeRemaining / 3600);
+            let minutes = Math.floor((timeRemaining % 3600) / 60);
+            let seconds = timeRemaining % 60;
+            document.getElementById('countdown').innerText = 
+                String(hours).padStart(2, '0') + ":" + 
+                String(minutes).padStart(2, '0') + ":" + 
+                String(seconds).padStart(2, '0');
+        }, 1000);
+
+        function submitBid() {
+            const route = document.getElementById('route').value;
+            const bidAmount = document.getElementById('bidAmount').value;
+            
+            if (!bidAmount || bidAmount <= 0) {
+                alert("Please enter a valid bid amount!");
+                return;
+            }
+
+            const auctionData = {
+                route: route,
+                bidAmount: bidAmount
+            };
+
+            tg.sendData(JSON.stringify(auctionData));
+        }
+    </script>
+</body>
+</html>
