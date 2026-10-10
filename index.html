@@ -72,6 +72,19 @@
             display: none;
         }
 
+        .locked-banner {
+            background: #fef2f2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 13px;
+            margin-bottom: 14px;
+            display: none;
+        }
+
         .category-card {
             background: #ffffff;
             border: 2px solid #e2e8f0;
@@ -264,6 +277,20 @@
 
         .submit-btn:active { transform: scale(0.98); }
 
+        .new-bid-btn {
+            width: 100%;
+            background: #f3f4f6;
+            color: #374151;
+            border: 2px dashed #9ca3af;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            display: none;
+        }
+
         .back-link {
             background: none;
             border: none;
@@ -273,6 +300,40 @@
             margin-bottom: 10px;
             font-size: 12px;
             padding: 0;
+        }
+
+        /* Pop-up Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 1000;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 340px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .modal-card h3 { margin-top: 0; color: var(--primary-dark); }
+        .modal-bid-num {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            background: #f0fdf4;
+            padding: 10px;
+            border-radius: 12px;
+            margin: 12px 0;
+            border: 2px solid #bbf7d0;
         }
     </style>
 </head>
@@ -309,11 +370,15 @@
 
             <!-- SCREEN 2: OPTIONS & BID INPUT -->
             <div id="screenOptions" class="screen">
-                <button class="back-link" onclick="goHome()">❮ Back to Categories</button>
+                <button class="back-link" id="backBtn" onclick="goHome()">❮ Back to Categories</button>
                 
                 <!-- TOP SELECTED BID BADGE -->
                 <div id="topBidBadge" class="selected-bid-badge">
                     🎯 YOUR BID NUMBER: <span id="topBidVal">0</span> ETB
+                </div>
+
+                <div id="lockedBanner" class="locked-banner">
+                    🔒 THIS BID IS LOCKED & CONFIRMED!<br>It cannot be changed. Pay via Telebirr below.
                 </div>
 
                 <h3 id="catTitle" style="margin: 0 0 10px 0; color:var(--primary-dark); font-size:16px;"></h3>
@@ -417,9 +482,21 @@
                     🚨 IF YOU DO NOT SEND THE MONEY TO +251922821774 AND SEND THE SCREENSHOT TO @EASY_TRAVEL, YOU ARE AUTOMATICALLY DISQUALIFIED!
                 </div>
 
-                <button class="submit-btn" onclick="submitBid()">🚀 Submit Bid & Get Payment Details</button>
+                <button class="submit-btn" id="mainSubmitBtn" onclick="openConfirmationModal()">🚀 Submit Bid & Lock Number</button>
+                <button class="new-bid-btn" id="newBidBtn" onclick="resetForNewBid()">➕ Place Another New Bid</button>
             </div>
 
+        </div>
+    </div>
+
+    <!-- POP-UP CONFIRMATION MODAL -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>🔒 Confirm Your Bid Number</h3>
+            <p style="font-size:13px; color:#475569;">Are you sure you want to lock in this unique bid number? Once confirmed, <b>it CANNOT be changed!</b></p>
+            <div id="modalBidVal" class="modal-bid-num">111 ETB</div>
+            <button class="submit-btn" onclick="confirmAndLockBid()" style="margin-top:10px;">✅ Confirm & Send to Telebirr</button>
+            <button class="back-link" onclick="closeModal()" style="margin-top:10px;">Cancel / Change</button>
         </div>
     </div>
 
@@ -427,12 +504,25 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
+        let isLocked = false;
         let state = {
             category: '',
             destination: '',
             tierName: '',
             serviceFee: 0
         };
+
+        // Load saved bid on startup if returning
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedBid = localStorage.getItem('easy_travel_bid');
+            if (savedBid) {
+                const parsed = JSON.parse(savedBid);
+                state = parsed.state;
+                document.getElementById('bidVal').value = parsed.bidStr;
+                openCategory(state.category);
+                lockInterface(parsed.bidStr);
+            }
+        });
 
         function openCategory(cat) {
             state.category = cat;
@@ -447,17 +537,20 @@
         }
 
         function goHome() {
+            if (isLocked) return;
             document.getElementById('screenOptions').classList.remove('active');
             document.getElementById('screenHome').classList.add('active');
         }
 
         function selectDestination(dest, el) {
+            if (isLocked) return;
             state.destination = dest;
             document.querySelectorAll('.dest-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
         }
 
         function setTier(tierName, fee, el) {
+            if (isLocked) return;
             state.tierName = tierName;
             state.serviceFee = fee;
             document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('selected'));
@@ -466,6 +559,7 @@
         }
 
         function updateBidDisplay() {
+            if (isLocked) return;
             let input = document.getElementById('bidVal').value.replace(/[^0-9]/g, '').slice(0, 3);
             document.getElementById('bidVal').value = input;
 
@@ -485,15 +579,10 @@
             document.getElementById('dispTotal').innerText = total + " ETB";
         }
 
-        function submitBid() {
-            if (!state.destination) {
-                alert("Please select a destination!");
-                return;
-            }
-            if (!state.tierName) {
-                alert("Please select a travel group tier!");
-                return;
-            }
+        function openConfirmationModal() {
+            if (isLocked) return;
+            if (!state.destination) { alert("Please select a destination!"); return; }
+            if (!state.tierName) { alert("Please select a travel group tier!"); return; }
 
             const bidStr = document.getElementById('bidVal').value.trim();
             if (!bidStr || parseInt(bidStr) <= 0) {
@@ -501,6 +590,17 @@
                 return;
             }
 
+            document.getElementById('modalBidVal').innerText = bidStr + " ETB";
+            document.getElementById('confirmModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+        }
+
+        function confirmAndLockBid() {
+            closeModal();
+            const bidStr = document.getElementById('bidVal').value.trim();
             const totalPayable = parseInt(bidStr) + state.serviceFee;
 
             const payload = {
@@ -512,7 +612,39 @@
                 totalPayable: totalPayable
             };
 
+            // Save state locally
+            localStorage.setItem('easy_travel_bid', JSON.stringify({ state: state, bidStr: bidStr }));
+
+            // Show Telegram Notification Pop-up
+            tg.showAlert(`🎯 NOTIFICATION: Your bid of ${bidStr} ETB is LOCKED!\n\nPlease send ${totalPayable} ETB to Telebirr (+251922821774) and send screenshot to @easy_travel.`);
+
+            lockInterface(bidStr);
+
+            // Send data to Telegram Bot
             tg.sendData(JSON.stringify(payload));
+        }
+
+        function lockInterface(bidStr) {
+            isLocked = true;
+            document.getElementById('bidVal').disabled = true;
+            document.getElementById('topBidBadge').style.display = 'block';
+            document.getElementById('topBidVal').innerText = bidStr;
+            document.getElementById('lockedBanner').style.display = 'block';
+            document.getElementById('mainSubmitBtn').style.display = 'none';
+            document.getElementById('newBidBtn').style.display = 'block';
+            document.getElementById('backBtn').style.opacity = '0.5';
+        }
+
+        function resetForNewBid() {
+            localStorage.removeItem('easy_travel_bid');
+            isLocked = false;
+            document.getElementById('bidVal').disabled = false;
+            document.getElementById('bidVal').value = '';
+            document.getElementById('lockedBanner').style.display = 'none';
+            document.getElementById('mainSubmitBtn').style.display = 'block';
+            document.getElementById('newBidBtn').style.display = 'none';
+            document.getElementById('backBtn').style.opacity = '1';
+            goHome();
         }
     </script>
 </body>
