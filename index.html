@@ -3,224 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Easy Travel - Lowest Unique Bid Auction</title>
+    <title>Easy Travel - Premier Auction Platform</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --primary: #00853f;
-            --primary-dark: #006c32;
-            --bg: #f3f4f6;
-            --card-bg: #ffffff;
-            --text: #1f2937;
+            --primary-dark: #005c2b;
+            --accent: #f59e0b;
+            --bg: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.96);
+            --text-main: #0f172a;
+            --text-sub: #475569;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background: radial-gradient(circle at top, #1e293b, #0f172a);
+            color: var(--text-main);
             margin: 0;
             padding: 12px;
             box-sizing: border-box;
+            min-height: 100vh;
         }
 
-        .card {
+        .container {
             max-width: 420px;
             margin: auto;
             background: var(--card-bg);
-            border-radius: 20px;
+            border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
         }
 
-        h2 { color: var(--primary); text-align: center; margin-top: 0; }
-        .subtitle { text-align: center; font-size: 13px; color: #6b7280; margin-bottom: 20px; }
+        .hero-banner {
+            height: 140px;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(15,23,42,0.85)), 
+                        url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 18px;
+            color: white;
+        }
+
+        .hero-banner h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-banner p {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .content { padding: 18px; }
 
         .screen { display: none; }
-        .screen.active { display: block; }
+        .screen.active { display: block; animation: fadeIn 0.3s ease-in-out; }
 
-        .menu-btn {
-            width: 100%;
-            background: white;
-            border: 2px solid var(--primary);
-            color: var(--primary);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .category-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
             padding: 16px;
-            margin-bottom: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 12px;
+            margin-bottom: 14px;
             cursor: pointer;
-            text-align: left;
+            transition: all 0.25s ease;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .category-card:hover, .category-card:active {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,133,63,0.15);
+        }
+
+        .category-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .category-sub {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .dest-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+            max-height: 220px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .dest-card {
+            position: relative;
+            height: 90px;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
             transition: all 0.2s;
         }
 
-        .menu-btn:hover, .menu-btn:active {
-            background: var(--primary);
+        .dest-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .dest-card.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,133,63,0.3);
+        }
+
+        .dest-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
             color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 8px;
+        }
+
+        .tier-btn {
+            width: 100%;
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .tier-btn:active, .tier-btn.selected {
+            background: #f0fdf4;
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         label {
             font-weight: 700;
             display: block;
             margin-top: 14px;
-            font-size: 12px;
-            color: #4b5563;
+            font-size: 11px;
+            color: var(--text-sub);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin-top: 6px;
-            border: 1.5px solid #e5e7eb;
-            border-radius: 10px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
             box-sizing: border-box;
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 600;
             outline: none;
-            background: #f9fafb;
+            background: #f8fafc;
         }
 
-        input:focus { border-color: var(--primary); background: #ffffff; }
+        input:focus {
+            border-color: var(--primary);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0,133,63,0.15);
+        }
 
-        .fee-box {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 10px;
-            padding: 12px;
-            margin-top: 14px;
+        .fee-card {
+            background: linear-gradient(135deg, #f0fdf4, #e0f2fe);
+            border: 1px solid #bbf7d0;
+            border-radius: 14px;
+            padding: 14px;
+            margin-top: 16px;
             font-size: 13px;
         }
 
         .fee-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            color: var(--text-sub);
         }
 
         .fee-row.total {
-            font-weight: 700;
-            border-top: 1px dashed #93c5fd;
-            padding-top: 6px;
-            margin-top: 6px;
-            color: #1e3a8a;
+            font-weight: 800;
+            border-top: 1px dashed #94a3b8;
+            padding-top: 8px;
+            margin-top: 8px;
+            color: var(--primary-dark);
+            font-size: 15px;
         }
 
         .notice-card {
             font-size: 11px;
             color: #92400e;
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 8px 10px;
-            border-radius: 6px;
-            margin-top: 12px;
+            background: #fffbeb;
+            border-left: 4px solid var(--accent);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 14px;
             line-height: 1.4;
         }
 
-        .action-btn {
+        .primary-btn {
             width: 100%;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            padding: 14px;
-            margin-top: 18px;
-            font-size: 15px;
-            font-weight: 700;
-            border-radius: 10px;
+            padding: 16px;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 800;
+            border-radius: 14px;
             cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,133,63,0.3);
+            transition: all 0.2s;
         }
 
-        .back-btn {
-            background: transparent;
+        .primary-btn:active { transform: scale(0.98); }
+
+        .back-link {
+            background: none;
             border: none;
-            color: #6b7280;
-            font-weight: 600;
+            color: var(--text-sub);
+            font-weight: 700;
             cursor: pointer;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 13px;
+            padding: 0;
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>🌍 Easy Travel</h2>
-        <div class="subtitle">Lowest Unique Bid Auction</div>
-
-        <!-- SCREEN 1: Main Category Selection -->
-        <div id="screenHome" class="screen active">
-            <p style="font-weight:600; font-size:14px; margin-bottom:14px;">Select Travel Category:</p>
-            <button class="menu-btn" onclick="selectCategory('Local')">
-                <span>🇪🇹 Local Travel</span> <span>➔</span>
-            </button>
-            <button class="menu-btn" onclick="selectCategory('International')">
-                <span>🌍 International Travel</span> <span>➔</span>
-            </button>
+    <div class="container">
+        <div class="hero-banner">
+            <h1>Easy Travel</h1>
+            <p>Lowest Unique Bid Flight & Tour Auction</p>
         </div>
 
-        <!-- SCREEN 2: Tier / People Selection -->
-        <div id="screenTiers" class="screen">
-            <button class="back-btn" onclick="goHome()">❮ Back</button>
-            <h3 id="tierTitle" style="margin-top:5px; color:#1f2937;">Select Package Tier</h3>
-            
-            <div id="localTiers" style="display:none;">
-                <button class="menu-btn" onclick="selectTier('Solo (1 Person)', 70)">
-                    <span>1 Person (Solo)</span> <span>70 ETB</span>
-                </button>
-                <button class="menu-btn" onclick="selectTier('Family (2 People)', 100)">
-                    <span>2 People (Family)</span> <span>100 ETB</span>
-                </button>
-                <button class="menu-btn" onclick="selectTier('Group (3+ People)', 300)">
-                    <span>3+ People (Group)</span> <span>300 ETB</span>
-                </button>
-            </div>
+        <div class="content">
 
-            <div id="intlTiers" style="display:none;">
-                <button class="menu-btn" onclick="selectTier('Solo (1 Person)', 300)">
-                    <span>1 Person (Solo)</span> <span>300 ETB</span>
-                </button>
-                <button class="menu-btn" onclick="selectTier('Family (2 People)', 450)">
-                    <span>2 People (Family)</span> <span>450 ETB</span>
-                </button>
-                <button class="menu-btn" onclick="selectTier('Group (3+ People)', 550)">
-                    <span>3+ People (Group)</span> <span>550 ETB</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- SCREEN 3: Route & 3-Digit Bid Input -->
-        <div id="screenBid" class="screen">
-            <button class="back-btn" onclick="goTiers()">❮ Back</button>
-            <h3 id="bidHeader" style="margin-top:5px; font-size:15px; color:var(--primary);"></h3>
-
-            <label for="routeText">Travel Route:</label>
-            <input type="text" id="routeText" placeholder="e.g. Addis Ababa to Lalibela / Dubai">
-
-            <label for="bidAmount">3-Digit Max Bid Amount (ETB):</label>
-            <input type="text" id="bidAmount" placeholder="e.g. 111 or 999" maxlength="3" oninput="validateBid()">
-
-            <div class="fee-box">
-                <div class="fee-row">
-                    <span>Your Bid:</span>
-                    <span id="dispBid">0 ETB</span>
+            <!-- SCREEN 1: CATEGORY SELECTION -->
+            <div id="screenHome" class="screen active">
+                <p style="font-weight:700; font-size:14px; color:var(--text-sub); margin-bottom:14px;">SELECT TRAVEL CATEGORY</p>
+                
+                <div class="category-card" onclick="openCategory('Local')">
+                    <div>
+                        <div class="category-title">🇪🇹 Local & Regional Travel</div>
+                        <div class="category-sub">Hawassa, Adama, Harar, Wenchi, Djibouti</div>
+                    </div>
+                    <span style="color:var(--primary); font-size:20px;">➔</span>
                 </div>
-                <div class="fee-row">
-                    <span>Service Fee:</span>
-                    <span id="dispFee">0 ETB</span>
-                </div>
-                <div class="fee-row total">
-                    <span>Total Telebirr Payable:</span>
-                    <span id="dispTotal">0 ETB</span>
+
+                <div class="category-card" onclick="openCategory('International')">
+                    <div>
+                        <div class="category-title">🌍 International Flights</div>
+                        <div class="category-sub">Dubai, Seychelles, Bangkok, Thailand, Nairobi</div>
+                    </div>
+                    <span style="color:var(--primary); font-size:20px;">➔</span>
                 </div>
             </div>
 
-            <div class="notice-card">
-                ⚠️ <b>Rule:</b> Bids must be numbers of <b>3 digits or less</b> (max 999). After submitting, you must send your Telebirr screenshot to <b>@easy_travel</b>.
+            <!-- SCREEN 2: DESTINATION & TIER SELECT -->
+            <div id="screenOptions" class="screen">
+                <button class="back-link" onclick="goHome()">❮ Back to Categories</button>
+                <h3 id="catTitle" style="margin: 0 0 12px 0; color:var(--primary-dark); font-size:18px;"></h3>
+
+                <label>1. Select Destination:</label>
+                <div id="localGrid" class="dest-grid" style="display:none;">
+                    <div class="dest-card" onclick="selectDestination('Hawassa', this)">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80" alt="Hawassa">
+                        <div class="dest-label">🌊 Hawassa</div>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('Adama', this)">
+                        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=400&q=80" alt="Adama">
+                        <div class="dest-label">🏙️ Adama</div>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('Djibouti', this)">
+                        <img src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=400&q=80" alt="Djibouti">
+                        <div class="dest-label">🏖️ Djibouti</div>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('Harar', this)">
+                        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80" alt="Harar">
+                        <div class="dest-label">🕌 Harar</div>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('Wenchi', this)">
+                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400&q=80" alt="Wenchi">
+                        <div class="dest-label">🌋 Wenchi Crater</div>
+                    </div>
+                </div>
+
+                <div id="intlGrid" class="dest-grid" style="display:none;">
+                    <div class="dest-card" onclick="selectDestination('Dubai', this)">
+                        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=400&q=80" alt="Dubai">
+                        <div class="dest-label">🏙️ Dubai</div>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('Seychelles', this)">
+                        <img src="https://images.unsplash.com/photo-1589553460732-58ef7a71fbb5?auto=format&fit=crop&w=400&q=80" alt="Seychelles">
+                        <div class="dest-label">🏝️ Seychelles</div>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('Bangkok', this)">
+                        <img src="https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=400&q=80" alt="Bangkok">
+                        <div class="dest-label">🛕 Bangkok</div>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('Thailand', this)">
+                        <img src="https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=400&q=80" alt="Thailand">
+                        <div class="dest-label">🌴 Thailand</div>
+                    </div>
+                    <div class="dest-card" onclick="selectDestination('Nairobi', this)">
+                        <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=400&q=80" alt="Nairobi">
+                        <div class="dest-label">🦒 Nairobi</div>
+                    </div>
+                </div>
+
+                <label>2. Select Travel Group Tier:</label>
+                <div id="localTiers" style="display:none;">
+                    <button class="tier-btn" onclick="setTier('1 Person (Solo)', 70, this)">
+                        <span>👤 1 Person (Solo)</span> <span>70 ETB</span>
+                    </button>
+                    <button class="tier-btn" onclick="setTier('2 People (Family)', 100, this)">
+                        <span>👥 2 People (Family)</span> <span>100 ETB</span>
+                    </button>
+                    <button class="tier-btn" onclick="setTier('3+ People (Group)', 300, this)">
+                        <span>👨‍👩‍👧‍👦 3+ People (Group)</span> <span>300 ETB</span>
+                    </button>
+                </div>
+
+                <div id="intlTiers" style="display:none;">
+                    <button class="tier-btn" onclick="setTier('1 Person (Solo)', 300, this)">
+                        <span>👤 1 Person (Solo)</span> <span>300 ETB</span>
+                    </button>
+                    <button class="tier-btn" onclick="setTier('2 People (Family)', 450, this)">
+                        <span>👥 2 People (Family)</span> <span>450 ETB</span>
+                    </button>
+                    <button class="tier-btn" onclick="setTier('3+ People (Group)', 550, this)">
+                        <span>👨‍👩‍👧‍👦 3+ People (Group)</span> <span>550 ETB</span>
+                    </button>
+                </div>
+
+                <label for="bidVal">3-Digit Unique Bid (ETB):</label>
+                <input type="text" id="bidVal" placeholder="e.g. 111 or 999" maxlength="3" oninput="calculateTotals()">
+
+                <div class="fee-card">
+                    <div class="fee-row">
+                        <span>Your Unique Bid:</span>
+                        <span id="dispBid">0 ETB</span>
+                    </div>
+                    <div class="fee-row">
+                        <span>Service Charge:</span>
+                        <span id="dispFee">0 ETB</span>
+                    </div>
+                    <div class="fee-row total">
+                        <span>Total Payable via Telebirr:</span>
+                        <span id="dispTotal">0 ETB</span>
+                    </div>
+                </div>
+
+                <div class="notice-card">
+                    📌 <b>Strict Rule:</b> Bid must be <b>3 digits or less</b> (max 999 ETB). Pay via Telebirr merchant <b>+251922821774</b> and send screenshot to <b>@easy_travel</b>.
+                </div>
+
+                <button class="primary-btn" onclick="submitBid()">📲 Proceed to Telebirr Payment</button>
             </div>
 
-            <button class="action-btn" onclick="submitBidForm()">📲 Proceed to Telebirr Payment</button>
         </div>
     </div>
 
@@ -230,87 +404,79 @@
 
         let state = {
             category: '',
+            destination: '',
             tierName: '',
             serviceFee: 0
         };
 
-        function selectCategory(cat) {
+        function openCategory(cat) {
             state.category = cat;
             document.getElementById('screenHome').classList.remove('active');
-            document.getElementById('screenTiers').classList.add('active');
-            
-            document.getElementById('tierTitle').innerText = cat + " Travel Packages";
+            document.getElementById('screenOptions').classList.add('active');
+
+            document.getElementById('catTitle').innerText = cat + " Auctions";
+            document.getElementById('localGrid').style.display = cat === 'Local' ? 'grid' : 'none';
+            document.getElementById('intlGrid').style.display = cat === 'International' ? 'grid' : 'none';
             document.getElementById('localTiers').style.display = cat === 'Local' ? 'block' : 'none';
             document.getElementById('intlTiers').style.display = cat === 'International' ? 'block' : 'none';
         }
 
-        function selectTier(tierName, fee) {
-            state.tierName = tierName;
-            state.serviceFee = fee;
-
-            document.getElementById('screenTiers').classList.remove('active');
-            document.getElementById('screenBid').classList.add('active');
-
-            document.getElementById('bidHeader').innerText = `${state.category} ➔ ${tierName} (${fee} ETB Fee)`;
-            calculateTotals();
-        }
-
         function goHome() {
-            document.getElementById('screenTiers').classList.remove('active');
+            document.getElementById('screenOptions').classList.remove('active');
             document.getElementById('screenHome').classList.add('active');
         }
 
-        function goTiers() {
-            document.getElementById('screenBid').classList.remove('active');
-            document.getElementById('screenTiers').classList.add('active');
+        function selectDestination(dest, el) {
+            state.destination = dest;
+            document.querySelectorAll('.dest-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
         }
 
-        function validateBid() {
-            let input = document.getElementById('bidAmount').value;
-            // Keep only numbers up to 3 digits
-            input = input.replace(/[^0-9]/g, '').slice(0, 3);
-            document.getElementById('bidAmount').value = input;
+        function setTier(tierName, fee, el) {
+            state.tierName = tierName;
+            state.serviceFee = fee;
+            document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
             calculateTotals();
         }
 
         function calculateTotals() {
-            const rawBid = document.getElementById('bidAmount').value;
-            const numBid = parseInt(rawBid) || 0;
-            const total = numBid + state.serviceFee;
+            let input = document.getElementById('bidVal').value.replace(/[^0-9]/g, '').slice(0, 3);
+            document.getElementById('bidVal').value = input;
 
-            document.getElementById('dispBid').innerText = numBid + " ETB";
+            const bidNum = parseInt(input) || 0;
+            const total = bidNum + state.serviceFee;
+
+            document.getElementById('dispBid').innerText = bidNum + " ETB";
             document.getElementById('dispFee').innerText = state.serviceFee + " ETB";
             document.getElementById('dispTotal').innerText = total + " ETB";
         }
 
-        function submitBidForm() {
-            const route = document.getElementById('routeText').value.trim();
-            const bidVal = document.getElementById('bidAmount').value.trim();
-
-            if (!route) {
-                alert("Please enter your travel route!");
+        function submitBid() {
+            if (!state.destination) {
+                alert("Please tap to select a destination!");
+                return;
+            }
+            if (!state.tierName) {
+                alert("Please select a travel tier!");
                 return;
             }
 
-            if (!bidVal || bidVal.length === 0 || parseInt(bidVal) <= 0) {
-                alert("Please enter a valid bid amount!");
+            const bidStr = document.getElementById('bidVal').value.trim();
+            if (!bidStr || parseInt(bidStr) <= 0) {
+                alert("Please enter a valid 3-digit bid amount!");
                 return;
             }
 
-            if (bidVal.length > 3) {
-                alert("Bid must be 3 digits or less (maximum 999)!");
-                return;
-            }
-
-            const total = parseInt(bidVal) + state.serviceFee;
+            const totalPayable = parseInt(bidStr) + state.serviceFee;
 
             const payload = {
                 category: state.category,
-                packageTier: state.tierName,
-                route: route,
-                bidAmount: bidVal,
+                destination: state.destination,
+                tier: state.tierName,
+                bidAmount: bidStr,
                 serviceFee: state.serviceFee,
-                totalPayable: total
+                totalPayable: totalPayable
             };
 
             tg.sendData(JSON.stringify(payload));
