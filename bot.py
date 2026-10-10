@@ -1,4 +1,7 @@
+import os
 import json
+import threading
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import (
     ApplicationBuilder, 
@@ -9,7 +12,15 @@ from telegram.ext import (
     filters
 )
 
-# Bot Configuration
+# 1. Dummy Web Server to keep Cloud Services (Render/Koyeb) happy 24/7
+def run_dummy_server():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(("0.0.0.0", port), SimpleHTTPRequestHandler)
+    server.serve_forever()
+
+threading.Thread(target=run_dummy_server, daemon=True).start()
+
+# 2. Bot Configuration
 BOT_TOKEN = "8824798747:AAEyWTfn20Qn24FoumWwb5Fskfhn88_vU4g"
 WEB_APP_URL = "https://Nahom1creator.github.io/Easy-Travel_bot/?v=14"
 ADMIN_TELEGRAM_ID = 8137351651  # Your numeric Admin Telegram ID
@@ -56,7 +67,6 @@ async def handle_web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE
         service_fee = data.get("serviceFee")
         total_payable = data.get("totalPayable")
 
-        # Save to internal memory
         bids_db[user.id] = {
             "username": f"@{user.username}" if user.username else user.first_name,
             "bid": int(bid_amount),
@@ -68,7 +78,6 @@ async def handle_web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE
             "status": "UNPAID ⏳"
         }
 
-        # User confirmation notification
         user_msg = (
             f"🔔 **BID LOCKED IN NOTIFICATION!**\n"
             f"━━━━━━━━━━━━━━━━━━━━━━\n"
@@ -96,7 +105,6 @@ async def handle_web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE
 
         await update.message.reply_text(user_msg, reply_markup=reply_markup, parse_mode="Markdown")
 
-        # Admin alert
         admin_keyboard = InlineKeyboardMarkup([
             [
                 InlineKeyboardButton("✅ Approve Payment", callback_data=f"adm_app_{user.id}"),
@@ -228,5 +236,5 @@ if __name__ == '__main__':
     application.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_web_app_data))
     application.add_handler(CallbackQueryHandler(handle_admin_buttons))
 
-    print("Easy Travel Bot is running with bid locking and modal popups...")
+    print("Easy Travel Bot is running with bid locking and HTTP keep-alive...")
     application.run_polling()
