@@ -30,70 +30,48 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 20px;
         }
 
-        .hero-banner {
+        h2 { color: var(--primary); text-align: center; margin-top: 0; }
+        .subtitle { text-align: center; font-size: 13px; color: #6b7280; margin-bottom: 20px; }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .menu-btn {
             width: 100%;
-            height: 130px;
-            background: linear-gradient(rgba(0,133,63,0.4), rgba(0,0,0,0.7)), 
-                        url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80') center/cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
             padding: 16px;
-            color: white;
-            box-sizing: border-box;
-        }
-
-        .hero-banner h1 {
-            margin: 0;
-            font-size: 22px;
-            font-weight: 800;
-        }
-
-        .content {
-            padding: 18px;
-        }
-
-        /* 2 Option Toggle Buttons */
-        .category-toggle {
-            display: flex;
-            background: #e5e7eb;
-            border-radius: 12px;
-            padding: 4px;
-            margin-bottom: 16px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
+            margin-bottom: 12px;
+            font-size: 16px;
             font-weight: 700;
-            font-size: 14px;
-            border: none;
-            background: transparent;
-            color: #6b7280;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             transition: all 0.2s;
         }
 
-        .tab-btn.active {
+        .menu-btn:hover, .menu-btn:active {
             background: var(--primary);
             color: white;
-            box-shadow: 0 2px 8px rgba(0,133,63,0.3);
         }
 
         label {
             font-weight: 700;
             display: block;
-            margin-top: 12px;
+            margin-top: 14px;
             font-size: 12px;
             color: #4b5563;
             text-transform: uppercase;
         }
 
-        select, input {
+        input {
             width: 100%;
             padding: 12px;
             margin-top: 6px;
@@ -105,10 +83,7 @@
             background: #f9fafb;
         }
 
-        select:focus, input:focus {
-            border-color: var(--primary);
-            background: #ffffff;
-        }
+        input:focus { border-color: var(--primary); background: #ffffff; }
 
         .fee-box {
             background: #eff6ff;
@@ -144,68 +119,108 @@
             line-height: 1.4;
         }
 
-        .submit-btn {
+        .action-btn {
             width: 100%;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
             padding: 14px;
-            margin-top: 16px;
+            margin-top: 18px;
             font-size: 15px;
             font-weight: 700;
             border-radius: 10px;
             cursor: pointer;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: none;
+            color: #6b7280;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div class="hero-banner">
-            <h1>Easy Travel</h1>
-            <p style="margin:2px 0 0 0; font-size:12px;">Lowest Unique Bid Auction</p>
+        <h2>🌍 Easy Travel</h2>
+        <div class="subtitle">Lowest Unique Bid Auction</div>
+
+        <!-- SCREEN 1: Main Category Selection -->
+        <div id="screenHome" class="screen active">
+            <p style="font-weight:600; font-size:14px; margin-bottom:14px;">Select Travel Category:</p>
+            <button class="menu-btn" onclick="selectCategory('Local')">
+                <span>🇪🇹 Local Travel</span> <span>➔</span>
+            </button>
+            <button class="menu-btn" onclick="selectCategory('International')">
+                <span>🌍 International Travel</span> <span>➔</span>
+            </button>
         </div>
 
-        <div class="content">
-            <!-- Two Options Toggle -->
-            <div class="category-toggle">
-                <button class="tab-btn active" id="btnLocal" onclick="selectCategory('local')">🇪🇹 Local</button>
-                <button class="tab-btn" id="btnIntl" onclick="selectCategory('international')">🌍 International</button>
+        <!-- SCREEN 2: Tier / People Selection -->
+        <div id="screenTiers" class="screen">
+            <button class="back-btn" onclick="goHome()">❮ Back</button>
+            <h3 id="tierTitle" style="margin-top:5px; color:#1f2937;">Select Package Tier</h3>
+            
+            <div id="localTiers" style="display:none;">
+                <button class="menu-btn" onclick="selectTier('Solo (1 Person)', 70)">
+                    <span>1 Person (Solo)</span> <span>70 ETB</span>
+                </button>
+                <button class="menu-btn" onclick="selectTier('Family (2 People)', 100)">
+                    <span>2 People (Family)</span> <span>100 ETB</span>
+                </button>
+                <button class="menu-btn" onclick="selectTier('Group (3+ People)', 300)">
+                    <span>3+ People (Group)</span> <span>300 ETB</span>
+                </button>
             </div>
 
-            <label for="routeText">Travel Route / Details:</label>
-            <input type="text" id="routeText" placeholder="e.g. Addis Ababa to Lalibela or Dubai">
+            <div id="intlTiers" style="display:none;">
+                <button class="menu-btn" onclick="selectTier('Solo (1 Person)', 300)">
+                    <span>1 Person (Solo)</span> <span>300 ETB</span>
+                </button>
+                <button class="menu-btn" onclick="selectTier('Family (2 People)', 450)">
+                    <span>2 People (Family)</span> <span>450 ETB</span>
+                </button>
+                <button class="menu-btn" onclick="selectTier('Group (3+ People)', 550)">
+                    <span>3+ People (Group)</span> <span>550 ETB</span>
+                </button>
+            </div>
+        </div>
 
-            <label for="peopleCount">Number of Travelers:</label>
-            <select id="peopleCount" onchange="calculateTotal()">
-                <option value="1">Solo (1 Person)</option>
-                <option value="2">Family / Group (2 People)</option>
-                <option value="3">Family / Group (3+ People)</option>
-            </select>
+        <!-- SCREEN 3: Route & 3-Digit Bid Input -->
+        <div id="screenBid" class="screen">
+            <button class="back-btn" onclick="goTiers()">❮ Back</button>
+            <h3 id="bidHeader" style="margin-top:5px; font-size:15px; color:var(--primary);"></h3>
 
-            <label for="bidAmount">3-Digit Unique Bid Amount (ETB):</label>
-            <input type="text" id="bidAmount" placeholder="e.g. 111 or 1.02" maxlength="5" oninput="validateAndCalculate()">
+            <label for="routeText">Travel Route:</label>
+            <input type="text" id="routeText" placeholder="e.g. Addis Ababa to Lalibela / Dubai">
+
+            <label for="bidAmount">3-Digit Max Bid Amount (ETB):</label>
+            <input type="text" id="bidAmount" placeholder="e.g. 111 or 999" maxlength="3" oninput="validateBid()">
 
             <div class="fee-box">
                 <div class="fee-row">
-                    <span>Your Bid Amount:</span>
+                    <span>Your Bid:</span>
                     <span id="dispBid">0 ETB</span>
                 </div>
                 <div class="fee-row">
-                    <span>Category Service Fee:</span>
-                    <span id="dispFee">70 ETB</span>
+                    <span>Service Fee:</span>
+                    <span id="dispFee">0 ETB</span>
                 </div>
                 <div class="fee-row total">
                     <span>Total Telebirr Payable:</span>
-                    <span id="dispTotal">70 ETB</span>
+                    <span id="dispTotal">0 ETB</span>
                 </div>
             </div>
 
             <div class="notice-card">
-                ⚠️ <b>Rule:</b> Bids must consist of exactly 3 digits (e.g., 111, 405, or 1.02). After submitting, you must send your Telebirr payment screenshot to <b>@easy_travel</b> to validate your bid.
+                ⚠️ <b>Rule:</b> Bids must be numbers of <b>3 digits or less</b> (max 999). After submitting, you must send your Telebirr screenshot to <b>@easy_travel</b>.
             </div>
 
-            <button class="submit-btn" onclick="submitBid()">📲 Proceed to Telebirr Payment</button>
+            <button class="action-btn" onclick="submitBidForm()">📲 Proceed to Telebirr Payment</button>
         </div>
     </div>
 
@@ -213,74 +228,92 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        let currentCategory = 'local';
+        let state = {
+            category: '',
+            tierName: '',
+            serviceFee: 0
+        };
 
         function selectCategory(cat) {
-            currentCategory = cat;
-            document.getElementById('btnLocal').classList.toggle('active', cat === 'local');
-            document.getElementById('btnIntl').classList.toggle('active', cat === 'international');
-            calculateTotal();
+            state.category = cat;
+            document.getElementById('screenHome').classList.remove('active');
+            document.getElementById('screenTiers').classList.add('active');
+            
+            document.getElementById('tierTitle').innerText = cat + " Travel Packages";
+            document.getElementById('localTiers').style.display = cat === 'Local' ? 'block' : 'none';
+            document.getElementById('intlTiers').style.display = cat === 'International' ? 'block' : 'none';
         }
 
-        function validateAndCalculate() {
+        function selectTier(tierName, fee) {
+            state.tierName = tierName;
+            state.serviceFee = fee;
+
+            document.getElementById('screenTiers').classList.remove('active');
+            document.getElementById('screenBid').classList.add('active');
+
+            document.getElementById('bidHeader').innerText = `${state.category} ➔ ${tierName} (${fee} ETB Fee)`;
+            calculateTotals();
+        }
+
+        function goHome() {
+            document.getElementById('screenTiers').classList.remove('active');
+            document.getElementById('screenHome').classList.add('active');
+        }
+
+        function goTiers() {
+            document.getElementById('screenBid').classList.remove('active');
+            document.getElementById('screenTiers').classList.add('active');
+        }
+
+        function validateBid() {
             let input = document.getElementById('bidAmount').value;
-            input = input.replace(/[^0-9.]/g, '');
+            // Keep only numbers up to 3 digits
+            input = input.replace(/[^0-9]/g, '').slice(0, 3);
             document.getElementById('bidAmount').value = input;
-            calculateTotal();
+            calculateTotals();
         }
 
-        function getServiceFee() {
-            const count = document.getElementById('peopleCount').value;
-            if (currentCategory === 'local') {
-                if (count === "1") return 70;
-                if (count === "2") return 100;
-                return 300;
-            } else {
-                if (count === "1") return 300;
-                if (count === "2") return 400;
-                return 500;
-            }
-        }
-
-        function calculateTotal() {
+        function calculateTotals() {
             const rawBid = document.getElementById('bidAmount').value;
-            const numBid = parseFloat(rawBid) || 0;
-            const fee = getServiceFee();
-            const total = numBid + fee;
+            const numBid = parseInt(rawBid) || 0;
+            const total = numBid + state.serviceFee;
 
             document.getElementById('dispBid').innerText = numBid + " ETB";
-            document.getElementById('dispFee').innerText = fee + " ETB";
+            document.getElementById('dispFee').innerText = state.serviceFee + " ETB";
             document.getElementById('dispTotal').innerText = total + " ETB";
         }
 
-        function submitBid() {
+        function submitBidForm() {
             const route = document.getElementById('routeText').value.trim();
             const bidVal = document.getElementById('bidAmount').value.trim();
-            
+
             if (!route) {
                 alert("Please enter your travel route!");
                 return;
             }
 
-            const digitCount = bidVal.replace(/[^0-9]/g, '').length;
-            if (digitCount !== 3) {
-                alert("Invalid Bid! Your bid must contain exactly 3 digits (e.g. 111, 405, or 1.02).");
+            if (!bidVal || bidVal.length === 0 || parseInt(bidVal) <= 0) {
+                alert("Please enter a valid bid amount!");
                 return;
             }
 
-            const fee = getServiceFee();
-            const total = (parseFloat(bidVal) || 0) + fee;
+            if (bidVal.length > 3) {
+                alert("Bid must be 3 digits or less (maximum 999)!");
+                return;
+            }
 
-            const data = {
-                category: currentCategory.toUpperCase(),
+            const total = parseInt(bidVal) + state.serviceFee;
+
+            const payload = {
+                category: state.category,
+                packageTier: state.tierName,
                 route: route,
-                peopleCount: document.getElementById('peopleCount').value,
                 bidAmount: bidVal,
-                serviceFee: fee,
+                serviceFee: state.serviceFee,
                 totalPayable: total
             };
 
-            tg.sendData(JSON.stringify(data));
+            tg.sendData(JSON.stringify(payload));
         }
     </script>
 </body>
