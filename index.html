@@ -9,7 +9,6 @@
         :root {
             --primary: #00853f;
             --primary-dark: #006c32;
-            --accent: #f59e0b;
             --bg: #f3f4f6;
             --card-bg: #ffffff;
             --text: #1f2937;
@@ -35,8 +34,8 @@
 
         .hero-banner {
             width: 100%;
-            height: 150px;
-            background: linear-gradient(rgba(0,133,63,0.3), rgba(0,0,0,0.7)), 
+            height: 130px;
+            background: linear-gradient(rgba(0,133,63,0.4), rgba(0,0,0,0.7)), 
                         url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80') center/cover;
             display: flex;
             flex-direction: column;
@@ -48,75 +47,76 @@
 
         .hero-banner h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .hero-banner p {
-            margin: 4px 0 0 0;
-            font-size: 13px;
-            opacity: 0.9;
         }
 
         .content {
-            padding: 20px;
+            padding: 18px;
         }
 
-        .timer-badge {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            padding: 12px;
+        /* 2 Option Toggle Buttons */
+        .category-toggle {
+            display: flex;
+            background: #e5e7eb;
             border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 16px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
             text-align: center;
             font-weight: 700;
             font-size: 14px;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,133,63,0.3);
         }
 
         label {
             font-weight: 700;
             display: block;
-            margin-top: 16px;
+            margin-top: 12px;
             font-size: 12px;
             color: #4b5563;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         select, input {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             margin-top: 6px;
             border: 1.5px solid #e5e7eb;
-            border-radius: 12px;
+            border-radius: 10px;
             box-sizing: border-box;
             font-size: 14px;
-            background-color: #f9fafb;
-            color: #111827;
             outline: none;
-            transition: all 0.2s;
+            background: #f9fafb;
         }
 
         select:focus, input:focus {
             border-color: var(--primary);
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(0, 133, 63, 0.15);
+            background: #ffffff;
         }
 
-        .fee-calculator {
+        .fee-box {
             background: #eff6ff;
             border: 1px solid #bfdbfe;
-            border-radius: 12px;
-            padding: 12px 14px;
-            margin-top: 16px;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 14px;
             font-size: 13px;
-            color: #1e40af;
         }
 
         .fee-row {
@@ -131,37 +131,30 @@
             padding-top: 6px;
             margin-top: 6px;
             color: #1e3a8a;
-            font-size: 14px;
         }
 
-        .rules-card {
-            font-size: 12px;
-            color: #4b5563;
-            margin-top: 16px;
-            line-height: 1.5;
-            background: #fffbeb;
-            border-left: 4px solid var(--accent);
-            padding: 10px 12px;
+        .notice-card {
+            font-size: 11px;
+            color: #92400e;
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 8px 10px;
             border-radius: 6px;
+            margin-top: 12px;
+            line-height: 1.4;
         }
 
-        button {
+        .submit-btn {
             width: 100%;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            padding: 16px;
-            margin-top: 20px;
-            font-size: 16px;
+            padding: 14px;
+            margin-top: 16px;
+            font-size: 15px;
             font-weight: 700;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 133, 63, 0.3);
-            transition: all 0.2s;
-        }
-
-        button:active {
-            transform: scale(0.98);
         }
     </style>
 </head>
@@ -170,52 +163,49 @@
     <div class="card">
         <div class="hero-banner">
             <h1>Easy Travel</h1>
-            <p>Lowest Unique Bid Flight & Travel Auction</p>
+            <p style="margin:2px 0 0 0; font-size:12px;">Lowest Unique Bid Auction</p>
         </div>
 
         <div class="content">
-            <div class="timer-badge">
-                <span>⏳ Auction Ends In:</span>
-                <span id="countdown">12:45:30</span>
+            <!-- Two Options Toggle -->
+            <div class="category-toggle">
+                <button class="tab-btn active" id="btnLocal" onclick="selectCategory('local')">🇪🇹 Local</button>
+                <button class="tab-btn" id="btnIntl" onclick="selectCategory('international')">🌍 International</button>
             </div>
 
-            <label for="route">Select Travel Package / Flight Route:</label>
-            <select id="route" onchange="updateServiceFee()">
-                <optgroup label="🇪🇹 Domestic Routes">
-                    <option value="Domestic Solo Route" data-fee="70">✈️ Domestic Solo (Service Fee: 70 ETB)</option>
-                    <option value="Domestic Family (2 People)" data-fee="100">👨‍👩‍👧 Domestic Family - 2 People (Service Fee: 100 ETB)</option>
-                    <option value="Domestic Family (3+ People)" data-fee="300">👨‍👩‍👧‍👦 Domestic Family - 3+ People (Service Fee: 300 ETB)</option>
-                </optgroup>
-                <optgroup label="🌍 International Routes">
-                    <option value="International Solo Route" data-fee="300">🌍 International Solo (Service Fee: 300 ETB)</option>
-                    <option value="International Family (2 People)" data-fee="400">🌍👨‍👩‍👧 International Family - 2 People (Service Fee: 400 ETB)</option>
-                    <option value="International Family (3+ People)" data-fee="500">🌍👨‍👩‍👧‍👦 International Family - 3+ People (Service Fee: 500 ETB)</option>
-                </optgroup>
+            <label for="routeText">Travel Route / Details:</label>
+            <input type="text" id="routeText" placeholder="e.g. Addis Ababa to Lalibela or Dubai">
+
+            <label for="peopleCount">Number of Travelers:</label>
+            <select id="peopleCount" onchange="calculateTotal()">
+                <option value="1">Solo (1 Person)</option>
+                <option value="2">Family / Group (2 People)</option>
+                <option value="3">Family / Group (3+ People)</option>
             </select>
 
-            <label for="bidAmount">Your Unique Bid Amount (ETB):</label>
-            <input type="number" id="bidAmount" placeholder="e.g. 1450" min="1" oninput="calculateTotal()">
+            <label for="bidAmount">3-Digit Unique Bid Amount (ETB):</label>
+            <input type="text" id="bidAmount" placeholder="e.g. 111 or 1.02" maxlength="5" oninput="validateAndCalculate()">
 
-            <div class="fee-calculator">
+            <div class="fee-box">
                 <div class="fee-row">
                     <span>Your Bid Amount:</span>
-                    <span id="displayBid">0 ETB</span>
+                    <span id="dispBid">0 ETB</span>
                 </div>
                 <div class="fee-row">
-                    <span>Service Fee:</span>
-                    <span id="displayFee">70 ETB</span>
+                    <span>Category Service Fee:</span>
+                    <span id="dispFee">70 ETB</span>
                 </div>
                 <div class="fee-row total">
                     <span>Total Telebirr Payable:</span>
-                    <span id="displayTotal">70 ETB</span>
+                    <span id="dispTotal">70 ETB</span>
                 </div>
             </div>
 
-            <div class="rules-card">
-                💡 <b>How to Win:</b> Submit the <b>lowest bid price</b> that no other traveler chooses! You pay the category service charge to confirm your bid.
+            <div class="notice-card">
+                ⚠️ <b>Rule:</b> Bids must consist of exactly 3 digits (e.g., 111, 405, or 1.02). After submitting, you must send your Telebirr payment screenshot to <b>@easy_travel</b> to validate your bid.
             </div>
 
-            <button onclick="submitBid()">📲 Pay with Telebirr</button>
+            <button class="submit-btn" onclick="submitBid()">📲 Proceed to Telebirr Payment</button>
         </div>
     </div>
 
@@ -223,60 +213,74 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        let timeRemaining = 12 * 3600 + 45 * 60 + 30;
-        setInterval(() => {
-            if (timeRemaining > 0) timeRemaining--;
-            let hours = Math.floor(timeRemaining / 3600);
-            let minutes = Math.floor((timeRemaining % 3600) / 60);
-            let seconds = timeRemaining % 60;
-            document.getElementById('countdown').innerText = 
-                String(hours).padStart(2, '0') + ":" + 
-                String(minutes).padStart(2, '0') + ":" + 
-                String(seconds).padStart(2, '0');
-        }, 1000);
+        let currentCategory = 'local';
 
-        function getSelectedServiceFee() {
-            const selectElement = document.getElementById('route');
-            const selectedOption = selectElement.options[selectElement.selectedIndex];
-            return parseFloat(selectedOption.getAttribute('data-fee')) || 70;
-        }
-
-        function updateServiceFee() {
+        function selectCategory(cat) {
+            currentCategory = cat;
+            document.getElementById('btnLocal').classList.toggle('active', cat === 'local');
+            document.getElementById('btnIntl').classList.toggle('active', cat === 'international');
             calculateTotal();
         }
 
-        function calculateTotal() {
-            const bidInput = document.getElementById('bidAmount').value;
-            const bid = parseFloat(bidInput) || 0;
-            const serviceCharge = getSelectedServiceFee();
-            const total = bid + serviceCharge;
+        function validateAndCalculate() {
+            let input = document.getElementById('bidAmount').value;
+            input = input.replace(/[^0-9.]/g, '');
+            document.getElementById('bidAmount').value = input;
+            calculateTotal();
+        }
 
-            document.getElementById('displayBid').innerText = bid + " ETB";
-            document.getElementById('displayFee').innerText = serviceCharge + " ETB";
-            document.getElementById('displayTotal').innerText = total + " ETB";
+        function getServiceFee() {
+            const count = document.getElementById('peopleCount').value;
+            if (currentCategory === 'local') {
+                if (count === "1") return 70;
+                if (count === "2") return 100;
+                return 300;
+            } else {
+                if (count === "1") return 300;
+                if (count === "2") return 400;
+                return 500;
+            }
+        }
+
+        function calculateTotal() {
+            const rawBid = document.getElementById('bidAmount').value;
+            const numBid = parseFloat(rawBid) || 0;
+            const fee = getServiceFee();
+            const total = numBid + fee;
+
+            document.getElementById('dispBid').innerText = numBid + " ETB";
+            document.getElementById('dispFee').innerText = fee + " ETB";
+            document.getElementById('dispTotal').innerText = total + " ETB";
         }
 
         function submitBid() {
-            const selectElement = document.getElementById('route');
-            const route = selectElement.value;
-            const bidAmount = document.getElementById('bidAmount').value;
+            const route = document.getElementById('routeText').value.trim();
+            const bidVal = document.getElementById('bidAmount').value.trim();
             
-            if (!bidAmount || bidAmount <= 0) {
-                alert("Please enter a valid bid amount!");
+            if (!route) {
+                alert("Please enter your travel route!");
                 return;
             }
 
-            const serviceCharge = getSelectedServiceFee();
-            const totalPayable = parseFloat(bidAmount) + serviceCharge;
+            const digitCount = bidVal.replace(/[^0-9]/g, '').length;
+            if (digitCount !== 3) {
+                alert("Invalid Bid! Your bid must contain exactly 3 digits (e.g. 111, 405, or 1.02).");
+                return;
+            }
 
-            const auctionData = {
+            const fee = getServiceFee();
+            const total = (parseFloat(bidVal) || 0) + fee;
+
+            const data = {
+                category: currentCategory.toUpperCase(),
                 route: route,
-                bidAmount: bidAmount,
-                serviceCharge: serviceCharge,
-                totalPayable: totalPayable
+                peopleCount: document.getElementById('peopleCount').value,
+                bidAmount: bidVal,
+                serviceFee: fee,
+                totalPayable: total
             };
 
-            tg.sendData(JSON.stringify(auctionData));
+            tg.sendData(JSON.stringify(data));
         }
     </script>
 </body>
