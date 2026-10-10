@@ -12,12 +12,13 @@ from telegram.ext import (
     filters
 )
 
-# 1. Dummy Web Server to keep Cloud Services (Render/Koyeb) happy 24/7
+# 1. Dummy HTTP server to satisfy Render's free Web Service port checks
 def run_dummy_server():
     port = int(os.environ.get("PORT", 10000))
     server = HTTPServer(("0.0.0.0", port), SimpleHTTPRequestHandler)
     server.serve_forever()
 
+# Start dummy HTTP server in a separate thread before launching Telegram polling
 threading.Thread(target=run_dummy_server, daemon=True).start()
 
 # 2. Bot Configuration
