@@ -11,7 +11,7 @@
             --primary-dark: #005c2b;
             --accent: #f59e0b;
             --bg: #0f172a;
-            --card-bg: rgba(255, 255, 255, 0.96);
+            --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-sub: #475569;
         }
@@ -33,40 +33,29 @@
             border-radius: 24px;
             overflow: hidden;
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            backdrop-filter: blur(10px);
         }
 
         .hero-banner {
-            height: 140px;
+            height: 130px;
             background: linear-gradient(rgba(0,0,0,0.2), rgba(15,23,42,0.85)), 
                         url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80') center/cover;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 18px;
+            padding: 16px;
             color: white;
         }
 
-        .hero-banner h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .hero-banner p {
-            margin: 4px 0 0 0;
-            font-size: 13px;
-            color: #cbd5e1;
-        }
+        .hero-banner h1 { margin: 0; font-size: 22px; font-weight: 800; }
+        .hero-banner p { margin: 2px 0 0 0; font-size: 12px; color: #cbd5e1; }
 
         .content { padding: 18px; }
 
         .screen { display: none; }
-        .screen.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        .screen.active { display: block; animation: fadeIn 0.25s ease-in-out; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -77,44 +66,33 @@
             padding: 16px;
             margin-bottom: 14px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
-        .category-card:hover, .category-card:active {
+        .category-card:active {
             border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,133,63,0.15);
+            background: #f0fdf4;
         }
 
-        .category-title {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .category-sub {
-            font-size: 12px;
-            color: var(--text-sub);
-            margin-top: 2px;
-        }
+        .category-title { font-size: 16px; font-weight: 700; color: var(--text-main); }
+        .category-sub { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
 
         .dest-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             margin-bottom: 16px;
-            max-height: 220px;
+            max-height: 230px;
             overflow-y: auto;
-            padding-right: 4px;
+            padding-right: 2px;
         }
 
         .dest-card {
             position: relative;
-            height: 90px;
+            height: 95px;
             border-radius: 12px;
             overflow: hidden;
             cursor: pointer;
@@ -130,7 +108,7 @@
 
         .dest-card.selected {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0,133,63,0.3);
+            box-shadow: 0 0 0 3px rgba(0,133,63,0.35);
         }
 
         .dest-label {
@@ -138,31 +116,30 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            background: linear-gradient(transparent, rgba(0,0,0,0.88));
             color: white;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
-            padding: 6px 8px;
+            padding: 6px;
         }
 
         .tier-btn {
             width: 100%;
             background: #f8fafc;
             border: 1.5px solid #cbd5e1;
-            padding: 14px;
+            padding: 12px;
             border-radius: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             color: var(--text-main);
-            transition: all 0.2s;
         }
 
-        .tier-btn:active, .tier-btn.selected {
+        .tier-btn.selected {
             background: #f0fdf4;
             border-color: var(--primary);
             color: var(--primary);
@@ -171,22 +148,21 @@
         label {
             font-weight: 700;
             display: block;
-            margin-top: 14px;
+            margin-top: 12px;
             font-size: 11px;
             color: var(--text-sub);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         input {
             width: 100%;
-            padding: 14px;
-            margin-top: 6px;
+            padding: 12px;
+            margin-top: 4px;
             border: 1.5px solid #cbd5e1;
             border-radius: 12px;
             box-sizing: border-box;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
             outline: none;
             background: #f8fafc;
         }
@@ -194,43 +170,51 @@
         input:focus {
             border-color: var(--primary);
             background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(0,133,63,0.15);
         }
 
         .fee-card {
-            background: linear-gradient(135deg, #f0fdf4, #e0f2fe);
+            background: #f0fdf4;
             border: 1px solid #bbf7d0;
-            border-radius: 14px;
-            padding: 14px;
-            margin-top: 16px;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 12px;
             font-size: 13px;
         }
 
         .fee-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             color: var(--text-sub);
         }
 
         .fee-row.total {
             font-weight: 800;
             border-top: 1px dashed #94a3b8;
-            padding-top: 8px;
-            margin-top: 8px;
+            padding-top: 6px;
+            margin-top: 6px;
             color: var(--primary-dark);
-            font-size: 15px;
+            font-size: 14px;
         }
 
-        .notice-card {
-            font-size: 11px;
-            color: #92400e;
-            background: #fffbeb;
-            border-left: 4px solid var(--accent);
+        .telebirr-box {
+            background: #eff6ff;
+            border: 1.5px solid #60a5fa;
+            border-radius: 10px;
             padding: 10px;
-            border-radius: 8px;
-            margin-top: 14px;
-            line-height: 1.4;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: 700;
+            color: #1e40af;
+            font-size: 13px;
+        }
+
+        .telebirr-box code {
+            background: #ffffff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            color: #0d9488;
+            font-size: 14px;
         }
 
         .primary-btn {
@@ -238,17 +222,14 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            padding: 16px;
-            margin-top: 20px;
-            font-size: 16px;
+            padding: 15px;
+            margin-top: 16px;
+            font-size: 15px;
             font-weight: 800;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(0,133,63,0.3);
-            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,133,63,0.3);
         }
-
-        .primary-btn:active { transform: scale(0.98); }
 
         .back-link {
             background: none;
@@ -256,8 +237,8 @@
             color: var(--text-sub);
             font-weight: 700;
             cursor: pointer;
-            margin-bottom: 12px;
-            font-size: 13px;
+            margin-bottom: 10px;
+            font-size: 12px;
             padding: 0;
         }
     </style>
@@ -272,16 +253,16 @@
 
         <div class="content">
 
-            <!-- SCREEN 1: CATEGORY SELECTION -->
+            <!-- SCREEN 1: CATEGORY -->
             <div id="screenHome" class="screen active">
-                <p style="font-weight:700; font-size:14px; color:var(--text-sub); margin-bottom:14px;">SELECT TRAVEL CATEGORY</p>
+                <p style="font-weight:700; font-size:13px; color:var(--text-sub); margin-bottom:12px;">SELECT CATEGORY</p>
                 
                 <div class="category-card" onclick="openCategory('Local')">
                     <div>
-                        <div class="category-title">🇪🇹 Local & Regional Travel</div>
+                        <div class="category-title">🇪🇹 Local & Cultural Tours</div>
                         <div class="category-sub">Hawassa, Adama, Harar, Wenchi, Djibouti</div>
                     </div>
-                    <span style="color:var(--primary); font-size:20px;">➔</span>
+                    <span style="color:var(--primary); font-size:18px;">➔</span>
                 </div>
 
                 <div class="category-card" onclick="openCategory('International')">
@@ -289,35 +270,35 @@
                         <div class="category-title">🌍 International Flights</div>
                         <div class="category-sub">Dubai, Seychelles, Bangkok, Thailand, Nairobi</div>
                     </div>
-                    <span style="color:var(--primary); font-size:20px;">➔</span>
+                    <span style="color:var(--primary); font-size:18px;">➔</span>
                 </div>
             </div>
 
-            <!-- SCREEN 2: DESTINATION & TIER SELECT -->
+            <!-- SCREEN 2: OPTIONS -->
             <div id="screenOptions" class="screen">
                 <button class="back-link" onclick="goHome()">❮ Back to Categories</button>
-                <h3 id="catTitle" style="margin: 0 0 12px 0; color:var(--primary-dark); font-size:18px;"></h3>
+                <h3 id="catTitle" style="margin: 0 0 10px 0; color:var(--primary-dark); font-size:16px;"></h3>
 
-                <label>1. Select Destination:</label>
+                <label>1. Select Destination (Tap Picture):</label>
                 <div id="localGrid" class="dest-grid" style="display:none;">
                     <div class="dest-card" onclick="selectDestination('Hawassa', this)">
-                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80" alt="Hawassa">
-                        <div class="dest-label">🌊 Hawassa</div>
+                        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80" alt="Hawassa Cultural Fish Market & Lake">
+                        <div class="dest-label">🌊 Hawassa Cultural</div>
                     </div>
                     <div class="dest-card" onclick="selectDestination('Adama', this)">
-                        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=400&q=80" alt="Adama">
-                        <div class="dest-label">🏙️ Adama</div>
+                        <img src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=400&q=80" alt="Adama Rift Heritage">
+                        <div class="dest-label">🏙️ Adama Heritage</div>
                     </div>
                     <div class="dest-card" onclick="selectDestination('Djibouti', this)">
-                        <img src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=400&q=80" alt="Djibouti">
-                        <div class="dest-label">🏖️ Djibouti</div>
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80" alt="Djibouti Coast">
+                        <div class="dest-label">🏖️ Djibouti Sea</div>
                     </div>
                     <div class="dest-card" onclick="selectDestination('Harar', this)">
-                        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80" alt="Harar">
-                        <div class="dest-label">🕌 Harar</div>
+                        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=400&q=80" alt="Harar Jugol UNESCO">
+                        <div class="dest-label">🕌 Harar Jugol</div>
                     </div>
                     <div class="dest-card" onclick="selectDestination('Wenchi', this)">
-                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400&q=80" alt="Wenchi">
+                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400&q=80" alt="Wenchi Crater Lake">
                         <div class="dest-label">🌋 Wenchi Crater</div>
                     </div>
                 </div>
@@ -370,7 +351,7 @@
                     </button>
                 </div>
 
-                <label for="bidVal">3-Digit Unique Bid (ETB):</label>
+                <label for="bidVal">3-Digit Max Unique Bid (ETB):</label>
                 <input type="text" id="bidVal" placeholder="e.g. 111 or 999" maxlength="3" oninput="calculateTotals()">
 
                 <div class="fee-card">
@@ -388,8 +369,8 @@
                     </div>
                 </div>
 
-                <div class="notice-card">
-                    📌 <b>Strict Rule:</b> Bid must be <b>3 digits or less</b> (max 999 ETB). Pay via Telebirr merchant <b>+251922821774</b> and send screenshot to <b>@easy_travel</b>.
+                <div class="telebirr-box">
+                    📲 Pay via Telebirr: <code>+251922821774</code>
                 </div>
 
                 <button class="primary-btn" onclick="submitBid()">📲 Proceed to Telebirr Payment</button>
@@ -414,7 +395,7 @@
             document.getElementById('screenHome').classList.remove('active');
             document.getElementById('screenOptions').classList.add('active');
 
-            document.getElementById('catTitle').innerText = cat + " Auctions";
+            document.getElementById('catTitle').innerText = cat + " Travel Auctions";
             document.getElementById('localGrid').style.display = cat === 'Local' ? 'grid' : 'none';
             document.getElementById('intlGrid').style.display = cat === 'International' ? 'grid' : 'none';
             document.getElementById('localTiers').style.display = cat === 'Local' ? 'block' : 'none';
@@ -454,11 +435,11 @@
 
         function submitBid() {
             if (!state.destination) {
-                alert("Please tap to select a destination!");
+                alert("Please tap to choose a destination!");
                 return;
             }
             if (!state.tierName) {
-                alert("Please select a travel tier!");
+                alert("Please choose a travel group tier!");
                 return;
             }
 
