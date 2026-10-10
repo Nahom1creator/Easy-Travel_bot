@@ -6,165 +6,217 @@
     <title>Easy Travel - Lowest Unique Bid Auction</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f0f4f8;
-            color: #1a202c;
-            margin: 0;
-            padding: 16px;
+        :root {
+            --primary: #00853f;
+            --primary-dark: #006c32;
+            --accent: #f59e0b;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #1f2937;
         }
-        .container {
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .card {
             max-width: 420px;
             margin: auto;
-            background: #ffffff;
-            padding: 24px;
+            background: var(--card-bg);
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
+
+        .hero-banner {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(rgba(0,133,63,0.3), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 16px;
+            color: white;
+            box-sizing: border-box;
         }
-        .header h2 {
-            color: #00853f;
+
+        .hero-banner h1 {
             margin: 0;
             font-size: 24px;
-            font-weight: 700;
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
-        .header p {
+
+        .hero-banner p {
+            margin: 4px 0 0 0;
             font-size: 13px;
-            color: #718096;
-            margin-top: 4px;
+            opacity: 0.9;
         }
-        .timer-box {
+
+        .content {
+            padding: 20px;
+        }
+
+        .timer-badge {
             background: linear-gradient(135deg, #10b981, #059669);
-            color: #ffffff;
+            color: white;
             padding: 12px;
             border-radius: 12px;
             text-align: center;
             font-weight: 700;
-            margin-bottom: 20px;
-            font-size: 15px;
+            font-size: 14px;
             letter-spacing: 0.5px;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
+
         label {
-            font-weight: 600;
+            font-weight: 700;
             display: block;
-            margin-top: 14px;
-            font-size: 13px;
-            color: #4a5568;
+            margin-top: 16px;
+            font-size: 12px;
+            color: #4b5563;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
         select, input {
             width: 100%;
-            padding: 12px 14px;
+            padding: 14px;
             margin-top: 6px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 10px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
             box-sizing: border-box;
             font-size: 14px;
-            background-color: #f8fafc;
-            color: #1a202c;
+            background-color: #f9fafb;
+            color: #111827;
             outline: none;
             transition: all 0.2s;
         }
+
         select:focus, input:focus {
-            border-color: #00853f;
-            background-color: #fff;
-            box-shadow: 0 0 0 3px rgba(0,133,63,0.1);
+            border-color: var(--primary);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 133, 63, 0.15);
         }
-        .telebirr-banner {
-            background: #e0f2fe;
-            border: 1px solid #bae6fd;
-            border-radius: 10px;
-            padding: 10px 12px;
+
+        .fee-calculator {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 12px 14px;
             margin-top: 16px;
+            font-size: 13px;
+            color: #1e40af;
+        }
+
+        .fee-row {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            justify-content: space-between;
+            margin-bottom: 4px;
         }
-        .telebirr-banner span {
-            font-size: 12px;
-            color: #0369a1;
-            font-weight: 600;
+
+        .fee-row.total {
+            font-weight: 700;
+            border-top: 1px dashed #93c5fd;
+            padding-top: 6px;
+            margin-top: 6px;
+            color: #1e3a8a;
+            font-size: 14px;
         }
-        .rules {
+
+        .rules-card {
             font-size: 12px;
-            color: #4a5568;
+            color: #4b5563;
             margin-top: 16px;
             line-height: 1.5;
-            background: #f7fafc;
-            border-left: 4px solid #00853f;
+            background: #fffbeb;
+            border-left: 4px solid var(--accent);
             padding: 10px 12px;
             border-radius: 6px;
         }
+
         button {
             width: 100%;
-            background: linear-gradient(135deg, #00853f, #006c32);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            padding: 15px;
-            margin-top: 22px;
+            padding: 16px;
+            margin-top: 20px;
             font-size: 16px;
             font-weight: 700;
             border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0,133,63,0.3);
+            box-shadow: 0 4px 15px rgba(0, 133, 63, 0.3);
             transition: all 0.2s;
         }
-        button:active { transform: scale(0.98); }
+
+        button:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <h2>✈️ Easy Travel</h2>
+    <div class="card">
+        <div class="hero-banner">
+            <h1>Easy Travel</h1>
             <p>Lowest Unique Bid Flight & Travel Auction</p>
         </div>
-        
-        <div class="timer-box">
-            ⏳ Auction Closes In: <span id="countdown">12:45:30</span>
+
+        <div class="content">
+            <div class="timer-badge">
+                <span>⏳ Auction Ends In:</span>
+                <span id="countdown">12:45:30</span>
+            </div>
+
+            <label for="route">Select Travel Package / Flight Route:</label>
+            <select id="route" onchange="updateServiceFee()">
+                <optgroup label="🇪🇹 Domestic Routes">
+                    <option value="Domestic Solo Route" data-fee="70">✈️ Domestic Solo (Service Fee: 70 ETB)</option>
+                    <option value="Domestic Family (2 People)" data-fee="100">👨‍👩‍👧 Domestic Family - 2 People (Service Fee: 100 ETB)</option>
+                    <option value="Domestic Family (3+ People)" data-fee="300">👨‍👩‍👧‍👦 Domestic Family - 3+ People (Service Fee: 300 ETB)</option>
+                </optgroup>
+                <optgroup label="🌍 International Routes">
+                    <option value="International Solo Route" data-fee="300">🌍 International Solo (Service Fee: 300 ETB)</option>
+                    <option value="International Family (2 People)" data-fee="400">🌍👨‍👩‍👧 International Family - 2 People (Service Fee: 400 ETB)</option>
+                    <option value="International Family (3+ People)" data-fee="500">🌍👨‍👩‍👧‍👦 International Family - 3+ People (Service Fee: 500 ETB)</option>
+                </optgroup>
+            </select>
+
+            <label for="bidAmount">Your Unique Bid Amount (ETB):</label>
+            <input type="number" id="bidAmount" placeholder="e.g. 1450" min="1" oninput="calculateTotal()">
+
+            <div class="fee-calculator">
+                <div class="fee-row">
+                    <span>Your Bid Amount:</span>
+                    <span id="displayBid">0 ETB</span>
+                </div>
+                <div class="fee-row">
+                    <span>Service Fee:</span>
+                    <span id="displayFee">70 ETB</span>
+                </div>
+                <div class="fee-row total">
+                    <span>Total Telebirr Payable:</span>
+                    <span id="displayTotal">70 ETB</span>
+                </div>
+            </div>
+
+            <div class="rules-card">
+                💡 <b>How to Win:</b> Submit the <b>lowest bid price</b> that no other traveler chooses! You pay the category service charge to confirm your bid.
+            </div>
+
+            <button onclick="submitBid()">📲 Pay with Telebirr</button>
         </div>
-        
-        <label for="route">Select Travel Route / Package:</label>
-        <select id="route">
-            <optgroup label="👨‍👩‍👧‍👦 Family & Group Packages">
-                <option value="Family Package ➔ Lalibela (4 Seats)">Family Package ➔ Lalibela (4 Seats)</option>
-                <option value="Family Package ➔ Bahir Dar (4 Seats)">Family Package ➔ Bahir Dar (4 Seats)</option>
-                <option value="Family Getaway ➔ Dubai (4 Seats)">Family Getaway ➔ Dubai (4 Seats)</option>
-                <option value="Family Holiday ➔ Mombasa Beach (4 Seats)">Family Holiday ➔ Mombasa Beach (4 Seats)</option>
-            </optgroup>
-            <optgroup label="🇪🇹 Domestic Solo Routes">
-                <option value="Addis Ababa ➔ Lalibela">Addis Ababa ➔ Lalibela</option>
-                <option value="Addis Ababa ➔ Gondar">Addis Ababa ➔ Gondar</option>
-                <option value="Addis Ababa ➔ Bahir Dar">Addis Ababa ➔ Bahir Dar</option>
-                <option value="Addis Ababa ➔ Axum">Addis Ababa ➔ Axum</option>
-                <option value="Addis Ababa ➔ Dire Dawa">Addis Ababa ➔ Dire Dawa</option>
-            </optgroup>
-            <optgroup label="🌍 International Solo Routes">
-                <option value="Addis Ababa ➔ Dubai">Addis Ababa ➔ Dubai</option>
-                <option value="Addis Ababa ➔ Nairobi">Addis Ababa ➔ Nairobi</option>
-                <option value="Addis Ababa ➔ Cairo">Addis Ababa ➔ Cairo</option>
-                <option value="Addis Ababa ➔ Bangkok">Addis Ababa ➔ Bangkok</option>
-                <option value="Addis Ababa ➔ Washington DC">Addis Ababa ➔ Washington DC</option>
-            </optgroup>
-        </select>
-
-        <label for="bidAmount">Your Unique Bid Amount (ETB):</label>
-        <input type="number" id="bidAmount" placeholder="e.g. 2450 ETB" min="1">
-
-        <div class="telebirr-banner">
-            📲 <span>Pay bidding fee securely via Telebirr upon submission!</span>
-        </div>
-
-        <div class="rules">
-            📌 <b>How to Win:</b> The winner is the participant who submits the lowest unique bid amount that <b>no one else</b> has chosen!
-        </div>
-
-        <button onclick="submitBid()">Proceed to Telebirr Payment</button>
     </div>
 
     <script>
@@ -183,8 +235,30 @@
                 String(seconds).padStart(2, '0');
         }, 1000);
 
+        function getSelectedServiceFee() {
+            const selectElement = document.getElementById('route');
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            return parseFloat(selectedOption.getAttribute('data-fee')) || 70;
+        }
+
+        function updateServiceFee() {
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const bidInput = document.getElementById('bidAmount').value;
+            const bid = parseFloat(bidInput) || 0;
+            const serviceCharge = getSelectedServiceFee();
+            const total = bid + serviceCharge;
+
+            document.getElementById('displayBid').innerText = bid + " ETB";
+            document.getElementById('displayFee').innerText = serviceCharge + " ETB";
+            document.getElementById('displayTotal').innerText = total + " ETB";
+        }
+
         function submitBid() {
-            const route = document.getElementById('route').value;
+            const selectElement = document.getElementById('route');
+            const route = selectElement.value;
             const bidAmount = document.getElementById('bidAmount').value;
             
             if (!bidAmount || bidAmount <= 0) {
@@ -192,9 +266,14 @@
                 return;
             }
 
+            const serviceCharge = getSelectedServiceFee();
+            const totalPayable = parseFloat(bidAmount) + serviceCharge;
+
             const auctionData = {
                 route: route,
-                bidAmount: bidAmount
+                bidAmount: bidAmount,
+                serviceCharge: serviceCharge,
+                totalPayable: totalPayable
             };
 
             tg.sendData(JSON.stringify(auctionData));
